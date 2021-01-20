@@ -140,10 +140,10 @@ public class trie {
         
     }
 
-
+   
     
      public static void main(String[] args) {
-    
+  
      trie t=new trie();
      String[] words={"ape","apple","gasu","not","news","gapk"};
      for(int i=0;i<words.length;i++)
