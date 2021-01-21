@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.lang.System;
 import java.lang.*;
 public class trie {
@@ -8,11 +9,13 @@ public class trie {
         char data;//Each node will consist of data
         HashMap<Character,node> children;//map that holds pairs each of the character will point to a node .
         boolean terminal;//This value says whether a particular node is terminal or not
+        int frequency_or_no_of_child_nodes;
         node(char data)
         {
             this.data=data;
             this.terminal=false;
             this.children = new HashMap<Character, node>();
+            this.frequency_or_no_of_child_nodes=0;//we need to keep track of how many child nodes //or we are keeping track of how many nodes that are dependent on the current node
          
         }
 
@@ -22,8 +25,11 @@ public class trie {
          int cnt;// Holds the number of words that is been entered into the trie
         public trie()
         {
-           this.root=new node('\u0000');
+            this.root=new node('\u0000');
             this.cnt=0;
+        }
+        public int numwords(){
+            return this.cnt;
         }
        void insert(String w)
        {
@@ -31,26 +37,22 @@ public class trie {
            for(int i=0;i<w.length();i++)//we are going to traverse through the characters of the word w that we are going to insert into the trie
            {
                 char ch=w.charAt(i);
-                
-              try{
                 if(temp.children.get(ch)!=null)//here we are checking whether the hashmap that we have in our node has a key (that is a character) that points to a node 
                 {
+                      temp.frequency_or_no_of_child_nodes++; // we increment the frequency of the no of nodes depend on the current node
                       temp=temp.children.get(ch); //if the ith character is already there in the trie we are making the temp to the node that has that particular character
+                     
                 }
                 else{//when the particular character is not there inside the trie we create a new node that will hold the ch and we will make our current temp's map (ch,(points to the new node))
                     node nnode=new node(ch);//creating a new node
                     temp.children.put(ch, nnode);//we are making the ch key in the  hashmap points to the new node
+                    temp.frequency_or_no_of_child_nodes++;
                     temp=nnode;//then we change our temp 
-
+                    
                 }
-            }
-            catch(Exception e)
-            {
-                node nnode=new node(ch);//creating a new node
-                    temp.children.put(ch, nnode);//we are making the ch key in the  hashmap points to the new node
-                    temp=nnode;//then we change our temp 
+            
+            
 
-            }
            }
            temp.terminal=true;//After traversing over all the characters in the above word we are in the last character of the word as the terminal node
            cnt++;
@@ -68,6 +70,7 @@ public class trie {
               return false;
             }
             temp=temp.children.get(ch);//if it is present we keep on moving to next node until the last character in the word
+            System.out.println("data = "+temp.data+" no_of_child_nodes_depe = "+temp.frequency_or_no_of_child_nodes);
          }
             if(temp.terminal==false)//if the last character(of the node )  is not terminal node we return fale 
             {
@@ -80,6 +83,32 @@ public class trie {
          
          return flag;
 
+       }
+       void del(String word)
+       {
+           this.delete(root,word);
+       }
+       void delete(node root,String w)
+       {
+           if(w.length()==0) //while we recursively call this delete function again again some part of time it will become 0 lenght as we keep on reducing the lengt of the string
+           {
+               root.terminal=false;// so the root will be holding the last character node and we are making the terminal value as false
+               return;
+           }
+           node child=root.children.get(w.charAt(0));//we are getting the child node from the given character that is represented in hashmap
+           if(child==null)
+           { 
+            return;//when the child is null then from root no node is pointing to that character so we return
+           }
+           delete(child,w.substring(1)); // we are keep on reducing the string size and changing the child to point to the next node
+          
+           if(!child.terminal && child.frequency_or_no_of_child_nodes==0)//we remove a node if and only it doesnt have any child nodes
+           {
+            //root.children.put(w.charAt(0), null); // from the parent node that is root ..we are making the reference node for that character as null
+            root.children.remove(w.charAt(0));
+            child=null; //when the particular node is pointing to null it will be removed
+            root.frequency_or_no_of_child_nodes--;//as we removed the one of the child of the root.we reduce the number which says for how many children it is dependent
+          }
        }
 
     void ppre(String pre,ArrayList<Character> sw)
@@ -139,7 +168,29 @@ public class trie {
        
         
     }
+    void display()
+    {
+        this.display_1(this.root,"");
+    }
+    void display_1(node temp,String d)
+    {
+        //if(temp==null)
+        //{
+           // return;
+       // }
+        if(temp.terminal==true)
+        {
+            String k=d+temp.data;
+            System.out.println(k);
+        }
+        Set<Map.Entry<Character,node>> entrries=temp.children.entrySet(); // Here we are creating an iterable object of the HashMap.
+        for(Map.Entry<Character,node> entry:entrries)
+        {
+            this.display_1(entry.getValue(), d+temp.data);
+        }
 
+        
+    }
    
     
      public static void main(String[] args) {
@@ -150,11 +201,11 @@ public class trie {
      {
          t.insert(words[i]);
      }    
-     
-    node start=t.prefixsearch_get_the_last_character_node("a");
-    ArrayList<Character> ch=new ArrayList<>();
-    t.prefix_pprint(start,ch,0,"a");
-   //System.out.println(e.getValue().data);
+     t.display();
+     t.del("news");
+     System.out.println();
+     t.display();
+
 
     
      
