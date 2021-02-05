@@ -1,13 +1,18 @@
 
+import java.security.KeyStore.Entry;
 import java.sql.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+
+import jdk.javadoc.internal.doclets.formats.html.markup.Head;
 
 public class arrayyyss {
     static int kadanes_algo(int[] a)//this algorithm is used to find what is the maximum subarray sum that can be possible out from the array
@@ -1156,13 +1161,424 @@ public class arrayyyss {
 
 
    }
+   public void deleteNode__SDE_LINKED_LIST_5(ListNode node) {
+    node.val=node.next.val;
+    node.next=node.next.next;
+   }
+   public ListNode addTwoNumbers_SDE_LINKED_LIST_6(ListNode l1, ListNode l2) {
+        if(l1==null)
+        {
+            return l2;
+
+        }
+        if(l2==null)
+        {
+            return l1;
+        }
+        ListNode dummy=new ListNode();
+       
+        ListNode temp=dummy;
+        int sum=0;
+        int carry=0;
+        while(l1!=null||l2!=null||carry!=0)
+        {
+            int v1,v2,v3;
+            v3=carry;
+            if(l1==null)
+            {
+                v1=0;
+            }
+            else{
+                v1=l1.val;
+                l1=l1.next;
+            }
+            if(l2==null)
+            {
+                v2=0;
+            }
+            else{
+                v2=l2.val;
+                l2=l2.next;
+            }
+            sum=v1+v2+v3;
+            carry=sum/10;
+            sum=sum%10;
+            ListNode newnode=new ListNode(sum);
+            temp.next=newnode;
+            temp=temp.next;
+            
+        
+        }
+        return dummy.next;
+  } 
+  public ListNode getIntersectionNode_SDE_LINKED_LIST_7(ListNode headA, ListNode headB) {
+    if(headA==null)//when there is no A list there wont be intersection of list A and List B
+    {
+        return null;
+    }
+    if(headB==null)//when there is no B list there wont be intersection of list A and List B
+    {
+       return null;   
+    }
+    ListNode d1=headA;
+    ListNode d2=headB;
+    while(d1!=d2)
+    {
+        d1=(d1==null)?headB:d1.next;
+        d2=(d2==null)?headA:d2.next;
+    }
+    return d1;
+}
+public ListNode reverseKGroup_SDE_LINKED_LIST_8(ListNode head, int k) {
+        if(head==null)
+        {
+            return null;
+        }
+        int count=0;//to count the number of nodes
+        ListNode cur=head;
+        while(cur.next!=null)
+        {
+          count++;
+          cur=cur.next;
+        }
+        ListNode dummy=new ListNode();
+        dummy.next=head;
+        ListNode prev=dummy;
+        ListNode nex=dummy;
+        int noofgroups=(int)count/k;
+        for(int j=1;j<=noofgroups;j++)
+        {
+            cur=prev.next;
+            nex=cur.next;
+            for(int i=1;i<k-1;i++)//for each group we need to perform the k-1 operations
+            {
+               cur.next=nex.next;
+               nex.next=prev.next;
+               prev.next=nex;
+               nex=cur.next;
+            }
+            prev=cur;
+            
+        }
+        return dummy.next;
+}
+public ListNode reverseList_s(ListNode head)
+{
+    ListNode prev=null;
+    //ListNode d=null;
+    ListNode next=head;
+    while(head!=null)
+    {
+        next=head.next;
+        head.next=prev;
+        prev=head;
+        head=next;
+    }
+    return prev;
+}
+public boolean isPalindrome_SDE_LINKED_LIST_9(ListNode head) {
+        ListNode cur=head;
+        ListNode fast=head;
+        ListNode slow=head;
+        while(fast.next!=null&&fast.next.next!=null)
+        {
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        slow.next=reverseList_s(slow.next);
+        slow=slow.next;
+        while(slow!=null)
+        {
+            if(cur.val!=slow.val)
+            {
+               return false;
+            }
+            cur=cur.next;
+            slow=slow.next;
+        }
+        return true;
+}
+public ListNode detectCycle_SDE_LINKED_LIST_10(ListNode head) {
+        if(head==null||head.next==null)
+        {
+            return null;
+        }
+        ListNode first=head;
+        ListNode second=head;
+        while(first!=second)
+        {
+            first=first.next.next;
+            second=second.next;
+        }
+        second=head;
+        while(first!=second)
+        {
+            first=first.next;
+            second=second.next;
+        }
+        return second;
+}
+   class Node
+  {
+	int data;
+	Node next;
+	Node bottom;
+	
+	Node(int d)
+	{
+		data = d;
+		next = null;
+		bottom = null;
+	}
+  }
+  Node Merge(Node l1,Node l2)
+  {
+      Node temp=new Node(0);
+      Node res=temp;
+      while(l1!=null&&l2!=null)
+      {
+      if(l1.data>l2.data)
+      {
+          int v=l2.data;
+          Node newNode=new Node(v);
+          temp.bottom=newNode;
+          temp=temp.bottom;
+          l2=l2.bottom;
+      }
+      else{
+        int v=l1.data;
+        Node newNode=new Node(v);
+        temp.bottom=newNode;
+        temp=temp.bottom;
+        l1=l1.bottom;
+
+      }
+    }
+    while(l1!=null)
+    {
+        int v=l1.data;
+        Node newNode=new Node(v);
+        temp.bottom=newNode;
+        temp=temp.bottom;
+        l1=l1.bottom;
+    }
+    while(l2!=null)
+    {
+        int v=l2.data;
+        Node newNode=new Node(v);
+        temp.bottom=newNode;
+        temp=temp.bottom;
+        l2=l2.bottom;
+    }
+    return res.bottom;
+  }
+
+    Node flatten_SDE_LINKED_LIST_11(Node root)
+    {
+    // Your code here
+    Node l1=root;
+    Node l2;
+    if(root.next!=null)
+    {
+        l2=flatten_SDE_LINKED_LIST_11(root.next);
+    }
+    else{
+        return l1;
+    }
+    Node res=Merge(l1,l2);
+    return res;
+
+    }
+    public ListNode rotateRight_SDE_LINKED_LIST_12(ListNode head, int k) {
+        if(head==null||head.next==null||k==0)
+        {
+            return head;
+        }
+        int count=1;
+        ListNode cur=head;
+        while(cur.next!=null)
+        {
+            count++;
+            cur=cur.next;
+        }
+        k=k%count;
+        cur.next=head;//make it as a circular linked list 
+        int stoppoint=count-k;
+        int scount=1;
+        ListNode temp=head;
+        while(scount!=stoppoint)
+        {
+            scount++;
+            temp=temp.next;
+        }
+        head=temp.next;
+        temp.next=null;
+        return head;
+
+
+    }
+     static void findDisappearedNumbers(int[] nums) {
+         int n=nums.length;
+         int curpos;
+         int[] a=new int[nums.length];
+         a=nums;
+        for(int i=0;i<n;i++)
+        {  
+            curpos=a[i]-1;
+            while(a[i]>0&&a[i]<=n&&a[i]!=a[curpos])
+            {
+                int temp=a[i];
+                a[i]=a[curpos];
+                a[curpos]=temp;
+                curpos=a[i]-1;
+            }
+        }
+        for(int i=0;i<n;i++)
+        {
+            System.out.print(a[i]+" ");
+        }
+        System.out.println();
+
+
+    }
+    class Node {
+        int val;
+        Node next;
+        Node random;
+    
+        public Node(int val) {
+            this.val = val;
+            this.next = null;
+            this.random = null;
+        }
+    }
+    public Node copyRandomList_Clonea_Linked_List_with_random_and_next_pointer_SDE_LINKED_LIST_13(Node head) {
+        //step 1
+        Node iter=head;
+        Node front=head;
+        while(iter!=null)
+        {
+            front=iter.next;
+            Node copy=new Node(iter.val);
+            iter.next=copy;
+            copy.next=front;
+            iter=front;
+        }
+        //step2
+        iter=head;
+        while(iter!=null)
+        {
+            if(iter.random!=null)
+            {
+            iter.next.random=iter.random.next;
+            }
+            iter=iter.next.next;
+        }
+        //step3
+        Node dummy=new Node(0);
+        Node psedo=dummy;
+        iter=head;
+        front=head;
+        while(iter!=null)
+        {
+            front=iter.next.next;
+            psedo.next=iter.next;
+            psedo=psedo.next;
+            iter.next=front;
+            iter=iter.next;
+        }
+        return dummy.next;
+    }
+    public List<List<Integer>> threeSum_SDE_LINKED_LIST_14(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res=new LinkedList<>();
+        int n=nums.length;
+        for(int i=0;i<n-2;i++)
+        {
+            int low=i+1;
+            int high=n-1;
+            int sum=0-nums[i];
+            while(low<high)
+            {
+              if(nums[low]+nums[high]==sum)
+             {
+                  List<Integer> ans=new ArrayList<Integer>();
+                  ans.add(nums[i]);
+                  ans.add(nums[low]);
+                  ans.add(nums[high]);
+                  res.add(ans);
+                  while(low<high&&nums[low]==nums[low+1])
+                  {
+                      low++;
+                  }
+                   while(low<high&&nums[high]==nums[high-1])
+                   {
+                       high--;
+                   }
+                  low++;
+                  high--;
+                  
+             }
+             else{
+                 if(nums[low]+nums[high]>sum)
+                 {
+                     high--;
+                 }
+                 else
+                 {
+                     low++;
+                 }
+             }
+                
+            }
+            while((i+1<n-2)&&(nums[i+1]==nums[i]))
+            {
+                i++;
+            }
+        }
+        return res;
+    }
+    public int trap_Trapping_rainwater(int[] height) {
+        int l=0;
+        int r=height.length-1;
+        int leftmost=0;
+        int rightmost=0;
+        int res=0;
+        while(l<r)
+        {
+            if(height[l]<=height[r])
+            {
+                if(height[l]>=leftmost)
+                {
+                    leftmost=height[l];
+                }
+                else{
+                    res+=leftmost-height[l];
+                }
+                l++;
+            }
+            else{
+                if(height[l]>=height[r])
+                {
+                  if(height[r]>=rightmost)
+                  {
+                      rightmost=height[r];
+                  }
+                  else{
+                      res+=rightmost-height[r];
+                  }
+                  r--;
+                }
+            }
+        }
+        return res;
+    }
     public static void main(String[] args)
     {
       
     
-     int[] a={1,2,0};
-     System.out.println(firstMissingPositive_SDE_ARRAY_IMPOOO(a));
-    
+     int[] a={1,1};
+    System.out.println(findShortestSubArray(a));
     
       
 
