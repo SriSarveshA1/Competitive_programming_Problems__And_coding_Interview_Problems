@@ -4,13 +4,17 @@ import java.sql.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.Set;
+
 
 import jdk.javadoc.internal.doclets.formats.html.markup.Head;
 
@@ -257,6 +261,7 @@ public class arrayyyss {
             }
         }
         res.add(new int[]{start,end}); //when we iterate over the last pair there will be tempstart,tempsend values that wont be added to the result and we need to add that.
+
         return res.toArray(new int[0][]);//we are returning the resultant in the form array.
     }
 
@@ -1441,6 +1446,7 @@ public ListNode detectCycle_SDE_LINKED_LIST_10(ListNode head) {
 
 
     }
+    /*
     class Node {
         int val;
         Node next;
@@ -1452,6 +1458,7 @@ public ListNode detectCycle_SDE_LINKED_LIST_10(ListNode head) {
             this.random = null;
         }
     }
+    /*
     public Node copyRandomList_Clonea_Linked_List_with_random_and_next_pointer_SDE_LINKED_LIST_13(Node head) {
         //step 1
         Node iter=head;
@@ -1489,6 +1496,7 @@ public ListNode detectCycle_SDE_LINKED_LIST_10(ListNode head) {
         }
         return dummy.next;
     }
+    */
     public List<List<Integer>> threeSum_SDE_LINKED_LIST_14(int[] nums) {
         Arrays.sort(nums);
         List<List<Integer>> res=new LinkedList<>();
@@ -1538,7 +1546,7 @@ public ListNode detectCycle_SDE_LINKED_LIST_10(ListNode head) {
         }
         return res;
     }
-    public int trap_Trapping_rainwater(int[] height) {
+    public int trap_Trapping_rainwaterthree_Sum_SDE_LINKED_LIST_15(int[] height) {
         int l=0;
         int r=height.length-1;
         int leftmost=0;
@@ -1573,15 +1581,491 @@ public ListNode detectCycle_SDE_LINKED_LIST_10(ListNode head) {
         }
         return res;
     }
+    public int removeDuplicates_Sum_SDE_LINKED_LIST_16(int[] nums) {
+        int i=0;
+        int j=i+1;
+        int n=nums.length;
+        while(j<n)
+        {
+            if(nums[i]!=nums[j])
+            {
+                i++;
+                nums[i]=nums[j];
+                
+            }
+            j++;
+        }
+        return i+1;
+    }
+    static class nodek{
+        int si;
+        int fi;
+        int pi;
+        nodek(int si,int fi,int pi)
+        {
+            this.si=si;
+            this.fi=fi;
+            this.pi=pi;
+        }
+    }
+    static class ok implements Comparator<nodek>
+    {
+      @Override
+      public int compare(nodek p1, nodek p2) {
+        // TOD
+         if(p1.fi<p2.fi)
+         {
+             return -1;
+         }
+         else{
+             if(p1.fi>p2.fi)
+             {
+                 return 1;
+             }
+             else{
+                 if(p1.pi<p2.pi)
+                 {
+                     return -1;
+                 }
+             }
+         }
+         return 1;
+       }
+    }
+    int maxMeetings_N_meeting_in_one_room_SDE_LINKED_LIST_16(int start[], int end[], int n) {
+        PriorityQueue<Integer> k=new PriorityQueue<>();
+            
+        // Your code here
+        List<nodek> m=new ArrayList<>();
+        for(int i=0;i<n;i++)
+        {
+            m.add(new nodek(start[i], end[i], i+1));
+        }
+        Collections.sort(m,new ok());
+        int count=1;
+        int last=m.get(0).fi;
+        for(int i=0;i<m.size();i++)
+        {
+            if(m.get(i).si>last)
+            {
+                count++;
+                last=m.get(i).fi;
+            }
+        }
+        return count;
+    }
+    public int Greedy_algorithm_to_find_minimum_number_of_Coins_SDE_LINKED_LIST_17(int[] coins, int amount) {
+        int n=coins.length;
+        int v=amount;
+        Arrays.sort(coins);
+        int count=0;
+        for(int i=n-1;i>=0;i--)
+        {
+            while(v>=coins[i])
+            {
+                v-=coins[i];
+                count++;
+            }
+        }
+        if(v==0)
+        {
+          return count;  
+        }
+            
+        return -1;
+    }
+    static class Job{
+    int id,profit,deadline;
+    Job(int x,int y,int z)
+    {
+        this.id=x;
+        this.deadline=y;
+        
+        this.profit=z;
+    }
+    }
+    static int[] JobScheduling_SDE_LINKED_LIST_18(Job arr[], int n){
+        // Your code here
+        Arrays.sort(arr,(a,b)->b.profit-a.profit);//sorting the jobs in descending order
+        int max=arr[0].deadline;
+        for(int i=1;i<n;i++)
+        {
+            if(arr[i].deadline>max)
+            {
+                max=arr[i].deadline;
+            }
+        }
+       // System.out.println("Max= "+max);
+        int[] dd=new int[max];
+        Arrays.fill(dd,-1);
+        for(int i=0;i<n;i++)
+        {
+           int index_in_d=arr[i].deadline-1;
+           int ori_in=index_in_d;
+           while(index_in_d!=-1&&dd[index_in_d]!=-1)
+           {
+              index_in_d--;   
+           }
+           if(index_in_d!=-1)
+           {
+           dd[index_in_d]=arr[i].profit;
+           }
+          
+            
+        }
+        int count=0;
+        int sum=0;
+        for(int i=0;i<max;i++)
+        {
+            if(dd[i]!=-1)
+            {
+                count++;
+                sum+=dd[i];
+            }
+        }
+       // System.out.println(count+" "+sum);
+        int[] ans=new int[2];
+        ans[0]=count;
+        ans[1]=sum;
+        return ans;
+        
+    }
+    static int one_by_Nth_root_of_an_integer_use_binary_search_square_root_cube_root_Binary_search_Divide_and_conquer_1(int num,int n)
+    {
+      int low=1,high=num;//what ever the root value it will be inbetween the low and high numbers
+      while(low<=high)
+      {
+          int mid=(low+high)/2;
+          int res=1;
+          for(int i=1;i<=n;i++)
+          {
+              res*=mid;
+          }
+          if(res==num)
+          {
+              return mid;
+          }
+          else{
+              if(res>num)
+              {
+                  high=mid-1;
+              }
+              else{
+                  low=mid+1;
+              }
+          }
+      }
+      
+      return -1;
+    }
+    static int find_Matrix_Median_Median_Divide_and_conquer_2(int[][] A) {
+    
+        int min,max;
+        int noOfr=A.length;
+        int noOfc=A[0].length;
+        min=Integer.MAX_VALUE;
+        for(int i=0;i<noOfr;i++)
+        {
+            min=Integer.min(min, A[i][0]);
+        
+        }
+        max=Integer.MIN_VALUE;
+        for(int i=0;i<noOfr;i++)
+        {
+            System.out.println(A[i][noOfc-1]);
+            max=Integer.max(max, A[i][noOfc-1]);
+        }
+        int mid;
+        int count=0;
+        int desired=(noOfc*noOfr+1)/2;
+        while(min<max)
+        {
+           mid=(min+max)/2;
+           count=0;
+           for(int i=0;i<noOfr;i++)
+           {
+            ArrayList<Integer> aa= new ArrayList<Integer>(A[i].length);
+            for (int ele : A[i])
+            {
+                aa.add(ele);
+            }
+            System.out.println("count of nos less than or equal to --mid"+"mid= "+mid+" count ="+lowerbound_and_upperbound.upper_bound(aa, mid) +" row ="+i);
+               count+=lowerbound_and_upperbound.upper_bound(aa, mid);
+           }
+           if(count<desired)
+           {
+               min=mid+1;
+           }
+           else{
+               max=mid;
+           }
+        }
+        return min;
+
+    }   
+    public int singleNonDuplicate_Find_the_element_that_appears_once_in_sorted_array_and_rest_element_appears_twice_Divide_and_conquer_3(int[] arr) {
+        int n=arr.length;
+          if(n<=0)
+        {
+            return -1;
+        }
+       int low=0;
+       int high=n-1;
+       int mid=0;
+       while(low<high)
+       {
+           mid=(low+high)/2;
+           if(mid%2==0)
+           {
+               if(arr[mid]!=arr[mid+1])
+               {
+                   high=mid;
+               }
+               else{
+                   low=mid+2;
+               }
+           }
+           else{
+               if(arr[mid]==arr[mid+1])
+               {
+                   high=mid-1;
+               }
+               else{
+                   low=mid+1;
+               }
+           }
+       }
+       return arr[low];
+    }
+    
+    public int search_Search_element_in_a_sorted_and_rotated_array_find_pivot_where_it_is_rotatedDivide_and_conquer4_varian_1(int[] nums, int target) {
+        int k=target;
+        int low=0;
+        int high=nums.length-1;
+        int mid=0;
+        if(nums.length==1)
+        {
+            if(nums[0]==k)
+            {
+                return 0;
+            }
+            else{
+                return -1;
+            }
+        }
+        while(low<=high)
+        {
+            mid=(low+high)/2;
+            if(nums[mid]==target)
+            {
+                return mid;
+            }
+            if(nums[0]<=nums[mid])
+            {
+              if(nums[0]<=k&&k<=nums[mid])
+              {
+                  high=mid-1;
+              }
+                else{
+                    low=mid+1;
+                }
+              
+            }
+            else
+            {
+                if(nums[mid]<=k&&k<=nums[nums.length-1])
+                {
+                    low=mid+1;
+                }
+                else{
+                    high=mid-1;
+                }
+            }
+            
+        }
+        if(low>=nums.length||nums[low]!=k)
+        {
+            return -1;
+        }
+        return low;
+    }
+    static int search_Search_element_in_a_sorted_and_rotated_array_find_pivot_where_it_is_rotatedDivide_and_conquer4_varian_2(int[] nums, int target) {
+        int k=target;
+        int low=0;
+        int high=nums.length-1;
+        int mid=0;
+        if(nums.length==1)
+        {
+            if(nums[0]==k)
+            {
+                return 0;
+            }
+            else{
+                return -1;
+            }
+        }
+        while(low<=high)
+        {
+           
+            mid=(low+high)/2;
+            System.out.println("low= "+low+" high="+high+" mid= "+mid);
+            
+            if(nums[mid]==target)
+            {
+                return mid;
+            }
+            
+           if(nums[low]==nums[mid])
+            {
+                System.out.println("vva");
+                low++;
+                continue;
+            }
+            
+            if(nums[0]<nums[mid])
+            {
+              if(nums[0]<=k&&k<=nums[mid])
+              {
+                  System.out.println("j high ="+high);
+                  high=mid-1;
+              }
+                else{
+                    System.out.println("j low= "+low);
+                    low=mid+1;
+                }
+              
+            }
+            else
+            {
+                if(nums[mid]<=k&&k<=nums[nums.length-1])
+                {
+                    System.out.println("t low="+low);
+                    low=mid+1;
+                }
+                else{
+                    System.out.println("t high="+high);
+                    high=mid-1;
+                }
+            }
+            
+        }
+        if(low>=nums.length||nums[low]!=k)
+        {
+            System.out.println("low= "+low+" high= "+high);
+            return -1;
+        }
+        return low;
+    }
+    static int countNegatives(int[][] grid) {
+        int count=0;
+        int N=grid.length;
+        int M=grid[0].length;
+        for(int i=0;i<N;i++)
+        {
+            int low=0;
+            int high=M-1;
+            int mid=0;
+            while(low<=high)
+            {
+                
+                    mid=(low+high)/2;
+                
+                    if(grid[i][mid]<0)
+                    {
+                        high=mid-1;
+                    }
+                    else{
+                        low=mid+1;
+                    }
+                
+            }
+            System.out.println("i= "+i+" low= "+low);
+            count+=M-low;
+        }
+        return count;
+    }
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        ArrayList<int[]> res=new ArrayList<>();
+        if(intervals.length==0||intervals==null)
+        {
+            res.add(new int[]{newInterval[0],newInterval[1]});
+            return res.toArray(new int[0][res.size()]);
+        }
+      //  boolean flag=false;
+        int[] temp=new int[2];
+        temp[0]=newInterval[0];
+        temp[1]=newInterval[1];
+        for(int i=0;i<intervals.length;i++)
+        {
+           if(intervals[i][1]<temp[0])
+           {
+               res.add(new int[]{intervals[i][0],intervals[i][1]});
+           }
+           else{
+               if(temp[1]<intervals[i][0])  
+               {
+                   res.add(new int[]{temp[0],temp[1]});
+               temp[0]=intervals[i][0];
+               temp[1]=intervals[i][1];
+               }
+               else{
+                   temp[0]=Integer.min(temp[0], intervals[i][0]);
+                   temp[1]=Integer.max(temp[1], intervals[i][1]);     
+            }
+           }
+            
+        }
+      // System.out.println("temp[0]= "+temp[0]+" temp[1]= "+temp[1]);
+        
+        res.add(new int[]{temp[0],temp[1]});
+        //Collections.sort(res,(a,b)->a[0]-b[0]);
+      
+       
+        return res.toArray(new int[0][res.size()]);
+    }
+    public double findMedian_of_two_SortedArrays_Divide_and_Conquer_Median_of_two_sorted(int[] nums1, int[] nums2) {
+        // time - O(log(min(nums1,nums2)))
+        if(nums1.length > nums2.length) {//we are doing this to get the binary search time complexity to be on the smaller array thus we get O(log(min(nums1,nums2)))
+            return findMedian_of_two_SortedArrays_Divide_and_Conquer_Median_of_two_sorted(nums2,nums1);
+        }
+        int l=0,r=nums1.length;
+        int combinedelementslength=(nums1.length+nums2.length+1)/2;
+        while(l<=r) {
+            int partx = (l+r)/2;//the both partx and party values after their calculations give an index(but that is actually the count of no of ele)
+            int party= combinedelementslength-partx;//we calculate party value using partx value
+
+            int firstleft = partx != 0 ? nums1[partx-1] : Integer.MIN_VALUE; //if the partx==0 means we are not gona take any elemnts from the partion as consideration and that time the firstleft will be right and the firstright will be nums1[partx](1 position next) ..we come across this situation when we take the party(patiosion y will be having all the elemnts that is to be presented left (n/2) size of the resultant array)
+            int firstright = partx != nums1.length ? nums1[partx] : Integer.MAX_VALUE;//if the partx==nums1.length we took the entire array as a partion and that time the first right will point to the Integer.MAX_VALUE as our firstleft points to nums1[partx]
+
+            int secondleft = party != 0 ? nums2[party-1] : Integer.MIN_VALUE;//same as first array it happens here also
+            int secondright = party != nums2.length ? nums2[party] : Integer.MAX_VALUE;
+            
+            if(firstleft <= secondright && secondleft <= firstright) {//we are checking the partion that we made is right
+                // we found the right partition
+                if((nums1.length + nums2.length) % 2 == 0) {
+                    return (double) (Math.max(firstleft,secondleft)+Math.min(firstright,secondright))/2;
+                }
+                else
+                    return (double) Math.max(firstleft,secondleft);
+            }
+            else 
+            {//if the partion we made using the low and high values is wrong we again compute the partion(partx value for the array with less size ) and use that value to compute the party value
+                if(firstleft > secondright)
+               { r=partx-1;}
+            else
+               { l=partx+1;}
+
+            }
+        }
+        return -1;
+    }
+
     public static void main(String[] args)
     {
-      
-    
-     int[] a={1,1};
-    System.out.println(findShortestSubArray(a));
-    
-      
-
+      //Job[] arr={(1,4,20),(2,1,10),(3,1,40),(4,1,30)};
+      int[][] A={{3,2},{1,0}};
+      int N=4;
+      System.out.println(countNegatives(A));
      
-    }
+   }
 }
