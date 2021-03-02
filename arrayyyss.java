@@ -2059,13 +2059,68 @@ public ListNode detectCycle_SDE_LINKED_LIST_10(ListNode head) {
         }
         return -1;
     }
+    
+    static int solvey(int[] A) {
+        int count=0;
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        int n=A.length;
+        if(n==1)
+        {
+            return 1;
+        }
+        int l=0,r=1;
+        hm.put(A[l],l);
+        while(l<n&&r<n)
+        {
+            if(hm.containsKey(A[r])==false)
+            {
+              hm.put(A[r],r);
+              if(r==n-1)
+              {
+                  System.out.println("index in Array A"+A[r]);
+                  count++;
+              }
+              
+            }
+            else{
+                int ri=hm.get(A[r]);
+               
+                if(l<=ri&&ri<=r)
+                {
+                    System.out.println("A[ri] = "+A[ri]+ " ri = "+ri);
+                    System.out.println("gr "+" r = "+r);
+                    count++;
+                }
+                l=r;
+                hm.put(A[r],r);
+                if(r==n-1)
+                {
+                    System.out.println("mk "+" r = "+r);
+                    count++;
+                }
+               // hm.put(A[r],r);
+            }
+            r++;
+        }
+        for (Map.Entry<Integer, Integer> entry : hm.entrySet()) {
+             System.out.println(entry.getKey()+" : "+entry.getValue());
+       }
+        
+       return count;
+        
+    }
+
+    static 
 
     public static void main(String[] args)
     {
-      //Job[] arr={(1,4,20),(2,1,10),(3,1,40),(4,1,30)};
-      int[][] A={{3,2},{1,0}};
-      int N=4;
-      System.out.println(countNegatives(A));
+      
+      int[] A={4,3,4,3,1,4};
+      
+    
+    
+     // int B=2;
+      System.out.println(solvey(A));
      
    }
 }
