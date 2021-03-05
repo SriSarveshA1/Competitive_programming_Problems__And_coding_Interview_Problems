@@ -51,10 +51,17 @@ public class queue_using_array {
     {
         int[] temp=data;
         data=new int[2*(data.length)];
-        for(int i=0;i<temp.length;i++)
+        int index=0;
+        for(int i=front;i<temp.length;i++)
         {
-            data[i]=temp[i];
+            data[index++]=temp[i];
         }
+        for(int i=0;i<=front-1;i++)
+        {
+            data[index++]=temp[i];   
+        }
+        front=0;
+        rear=temp.length-1;
 
     }
     public int front() throws queueEmptyException
@@ -85,4 +92,5 @@ public class queue_using_array {
         }        
         return temp;
     }
+
 }
