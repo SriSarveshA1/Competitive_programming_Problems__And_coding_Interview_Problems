@@ -203,11 +203,187 @@ public class sde_sheet_stack_queues {
         }
         return ans;
     } 
+    public class pairs<T,F>
+    {
+      public T first;
+      public F second;
+      public pairs(T first,F second)
+      {
+          this.first=first;
+          this.second=second;
+      }
+    }
+    public  int orangesRotting(int[][] grid)
+    {
+      int n=grid.length;//no of rows
+      int m=grid[0].length;//no of columns
+      Queue<pairs<Integer,Integer>> q=new ArrayDeque<>();
+      for(Integer i=0;i<n;i++)
+      {
+          for(Integer j=0;j<m;j++)
+          {
+              if(grid[i][j]==2)
+              {
+                q.add(new pairs<Integer,Integer>(i,j));
+              }
+              
+          }
+      }
+      q.add(new pairs<Integer,Integer>(-1,-1));
+      int count=0;
+      while(q.isEmpty()!=true)
+      {
+        if(q.size()==1)
+        {
+            break;
+        }
+        if((q.peek().first==-1)&&(q.peek().second==-1))
+        {
+         count++;
+         pairs<Integer,Integer> er=q.poll();
+         q.add(er); 
+        }
+         pairs<Integer,Integer> p=q.poll();
+         int x=p.first;
+         int y=p.second;
+         if((x+1<n)&&(grid[x+1][y]==1))
+         {
+          grid[x+1][y]=2;
+          q.add(new pairs<Integer,Integer>(x+1, y));
+         }
+         if((x-1>=0)&&(grid[x-1][y]==1))
+         {
+             grid[x-1][y]=2;
+             q.add(new pairs<Integer,Integer>(x-1, y));
+         }
+         if((y+1<m)&&(grid[x][y+1]==1))
+         {
+             grid[x][y+1]=2;
+             q.add(new pairs<Integer,Integer>(x, y+1));
 
+         }
+         if((y-1>=0)&&(grid[x][y-1]==1))
+         {
+             grid[x][y-1]=2;
+             q.add(new pairs<Integer,Integer>(x,y-1));
+         }
+         
+      }
+      for(Integer i=0;i<n;i++)
+      {
+          for(Integer j=0;j<m;j++)
+          {
+              if(grid[i][j]==1)
+              {
+                return -1;
+              }
+              
+          }
+      }
+      if(count==0)
+      {
+          return -1;
+      }
+      else{
+
+          return count;
+      }
+
+    }
+    public class Node<T,F>
+    {
+       T data;
+       F index;
+       Node(T data,F index)
+       {
+           this.data=data;
+           this.index=index;
+       }
+    }
+    public int[] maxSlidingWindow(int[] arr, int k) {
+        //ArrayList<Integer> ans=new ArrayList<>();
+       
+        Deque<Node<Integer,Integer>> dq=new ArrayDeque<>();
+        int n=arr.length;
+        int[] ans=new int[n-k+1];
+        int index=0;
+        for(int i=0;i<n;i++)
+        {
+         while(dq.size()>0&&dq.getLast().data<arr[i])
+         {
+             dq.removeLast();
+         }   
+         while(dq.size()>0&&dq.getFirst().index<=i-k)
+         {
+             dq.removeFirst();
+         }
+         dq.addLast(new Node<Integer,Integer>(arr[i], i));
+         if(i>=k-1)
+         {
+            // ans.add(dq.getFirst().data);
+            ans[index++]=dq.getFirst().data;
+         }
+        }
+        return ans; 
+    }
+public class Node<T,F> 
+    {
+        T data;
+        F ind;
+        public Node(T data,F ind)
+        {
+            this.data=data;
+            this.ind=ind;
+        }
+    }
+    public int largestRectangleArea(int[] arr) {
+        int n=arr.length;
+        Stack<Node<Integer,Integer>> st=new Stack<>();
+        int[] left=new int[n];
+        int[] right=new int[n];
+       // int leftindex=0,rightindex=0;
+       for(int i=0;i<n;++i)    //Fill left
+        {
+            if(st.isEmpty())
+            {    left[i] = 0;   st.push(new Node(arr[i],i));    }
+            else
+            {
+                while(!st.empty() &&st.peek().data>=arr[i])
+                {
+                    st.pop();
+                }
+                left[i] = st.isEmpty()?0:st.peek().ind+1;
+                st.push(new Node(arr[i],i));
+            }
+        }
+        while(st.isEmpty()!=true)
+        {
+            st.pop();
+        }
+        for(int i=n-1;i>=0;--i)
+        {  
+             if(st.isEmpty())
+            {    right[i] = n-1;   st.push(new Node(arr[i],i));    }
+            else
+            {
+                while(!st.empty() &&st.peek().data>=arr[i])
+                {
+                    st.pop();
+                }
+                right[i] = st.isEmpty()?n-1:st.peek().ind-1;
+                st.push(new Node(arr[i],i));
+            }
+        }
+        int mx_area = 0;    //Stores max_area
+        for(int i=0;i<n;++i)
+            mx_area = Integer.max(mx_area,arr[i]*(right[i]-left[i]+1));
+        return mx_area;
+        
+    }
     public static void main(String[] args)
     {
-        ArrayList<Integer> r=new ArrayList<>();
-        r.ge
+       
+        Deque<Integer> r=new ArrayDeque<>();
         
 
     }

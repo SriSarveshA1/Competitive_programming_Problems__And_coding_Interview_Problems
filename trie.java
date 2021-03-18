@@ -111,63 +111,8 @@ public class trie {
           }
        }
 
-    void ppre(String pre,ArrayList<Character> sw)
-    {
-        System.out.print(pre+"");
-        for(int i=0;i<sw.size();i++)
-        {
-             System.out.print(sw.get(i));
-        }
-        System.out.println();
-    }
-   node prefixsearch_get_the_last_character_node(String pre)
-    {
-        node start=root;
-        for(int i=0;i<pre.length();i++)
-        {
-            char ch=pre.charAt(i);
-            if(start.children.get(ch)==null)
-            {
-                return null;
-            }
-            start=start.children.get(ch);
-        }
-
-            return start;
-    }
-    
-   void prefix_pprint(node temp,ArrayList<Character> s,int j,String pree)
-    {
-        if(temp==null)
-        {
-            
-           // System.out.println(s.get(s.size()-1));
-            return;
-        }
-        if(temp.terminal==true)
-        {
-            ppre(pree,s);
-        }
-        for (Map.Entry<Character,node> e :temp.children.entrySet())
-        {
-            if(e.getValue()!=null)
-            {
-          s.add(e.getValue().data);
-        
-          temp=e.getValue();
-        
-          prefix_pprint(temp, s,j+1,pree);
-          s.remove(s.size()-1);
-
-            }
-            else{
-                return;
-            }
-          
-        }
-       
-        
-    }
+   
+   
     void display()
     {
         this.display_1(this.root,"");
@@ -180,20 +125,49 @@ public class trie {
        // }
         if(temp.terminal==true)
         {
-            String k=d+temp.data;
+            String k=d;
             System.out.println(k);
         }
         Set<Map.Entry<Character,node>> entrries=temp.children.entrySet(); // Here we are creating an iterable object of the HashMap.
         for(Map.Entry<Character,node> entry:entrries)
         {
-            this.display_1(entry.getValue(), d+temp.data);
+            this.display_1(entry.getValue(), d+entry.getValue().data);
         }
 
         
     }
    
-    
-     public static void main(String[] args) {
+    void pprefix_part1(String w)
+    {
+        node root=this.prefix_part2(this.root,w);
+        if(root==null)
+        {
+            System.out.println("no prefixes");
+        }
+        else{
+        display_1(root, w);
+        }
+   }
+    node prefix_part2(node root,String w)
+    {
+        node temp=root;
+        
+        for(int i=0;i<w.length();i++)
+        {
+            char ch=w.charAt(i);
+            if(temp.children.get(ch)!=null)
+            {
+                temp=temp.children.get(ch);
+            }
+            else{
+                return null;
+            }
+        }
+        return temp;
+    }
+
+     public static void main(String[] args)
+    {
   
      trie t=new trie();
      String[] words={"ape","apple","gasu","not","news","gapk"};
@@ -201,12 +175,9 @@ public class trie {
      {
          t.insert(words[i]);
      }    
-     t.display();
-     t.del("news");
+     t.pprefix_part1("ap");
      System.out.println();
      t.display();
-
-
     
      
  

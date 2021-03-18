@@ -89,7 +89,7 @@ public class maxxor_using_tree {
     {
          
         maxxor_using_tree t=new maxxor_using_tree();
-        int[] ar={3,5,10,8};
+        int[] ar={3,10};
         t.max_xor_helper(ar);
       
 ;
